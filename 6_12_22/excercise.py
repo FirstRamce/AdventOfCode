@@ -1,6 +1,6 @@
 from utils import *
 
-input = parse_input("C:\\DATA\\Programming\\advent-event\\6_12_22\\input.txt")
+input = parse_input("input.txt")
 
 begin_unique = get_first_x_different(4,input)
 print("first after code: " + str(begin_unique+4))
