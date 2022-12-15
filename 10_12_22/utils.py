@@ -1,14 +1,12 @@
 class Computer:
     registers=None
     open_instructions=[]
-    subscriptions=[]
     current_completed_cycle=0
     canvas=None
     
     def __init__(self, registers, canvas) -> None:
         self.registers = registers
         self.open_instructions = []
-        self.subscriptions=[]
         self.canvas=canvas
 
     def add_instruction(self,new_exercise):
