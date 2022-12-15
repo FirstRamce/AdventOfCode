@@ -23,7 +23,7 @@ with open("input_1") as f:
     for elve in sortedElves:
         if i == 1:
             print("first result: ")
-            print(elve)
+            print(sortedElves[elve])
         if i == 3:
             break
         sum = sum + sortedElves[elve]
