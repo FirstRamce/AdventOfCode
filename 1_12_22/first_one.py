@@ -17,6 +17,7 @@ with open("input_1") as f:
             break
     maxNumber=0
     sortedElves = {k: v for k, v in sorted(elves.items(), key=lambda item: item[1], reverse=True)}
+    print (sortedElves)
 
     i = 0
     sum =  0
