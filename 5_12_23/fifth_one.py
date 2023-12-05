@@ -7,6 +7,7 @@ endKey = "location"
 seedPattern="seeds:"
 seedsList = []
 mappers = {}
+reverseMappers = {}
 with open("input_5") as f:
     currentMapper = None
     for line in f.readlines():
@@ -18,6 +19,7 @@ with open("input_5") as f:
         elif(matchesMapDesignationLine(line)):
             currentMapper = Mapper(line)
             mappers[currentMapper.fromKey] = currentMapper
+            reverseMappers[currentMapper.toKey] = currentMapper
         elif matchesMapAssignLine(line):
             currentMapper.extractAssignLine(line)
 
@@ -33,6 +35,27 @@ for seed in seedsList:
     locations.append(currentNumber)
 print("solution 1: " + str(min(locations)))
 
+
+currentRanges = None
+while key != startKey:
+    mapper = reverseMappers[key]
+    currentRanges = mapper.getInputRangesSorted(currentRanges)
+    key = mapper.fromKey
+    print("ranges: " + str(currentRanges))
+
+seedRanges = np.asarray(seedsList).reshape(-1,2)
+seedRanges.sort()
+found = False
+for winRange in currentRanges:
+    for seedRange in seedRanges:
+        if mappers[startKey].getIntersection(winRange,seedRange):
+            print(mapper.getIntersection(winRange,seedRange))
+            found = True
+            break
+    if found:
+        break
+
+"""
 seedRanges = np.asarray(seedsList).reshape(-1,2)
 lowestLocation = sys.maxsize
 for seedRange in seedRanges:
@@ -49,4 +72,4 @@ for seedRange in seedRanges:
             #print("current: " + str(currentNumber) + " key: " + key + " used mapper: " + str(mapper))
         if lowestLocation > currentNumber:
             lowestLocation = currentNumber
-print("solution 2: " + str(lowestLocation))
+print("solution 2: " + str(lowestLocation))"""
