@@ -44,16 +44,29 @@ while key != startKey:
     print("ranges: " + str(currentRanges))
 
 seedRanges = np.asarray(seedsList).reshape(-1,2)
-seedRanges.sort()
+print("seed ranges: "+ str(seedRanges) + " seedsList: " + str(seedsList))
 found = False
+foundSeedRangeIntersect = None
 for winRange in currentRanges:
     for seedRange in seedRanges:
         if mappers[startKey].getIntersection(winRange,seedRange):
-            print(mapper.getIntersection(winRange,seedRange))
+            print("found intersection: " + str(mapper.getIntersection(winRange,seedRange)) + " between: " + str(winRange) + " " + str(seedRange))
+            
+            foundSeedRangeIntersect = mapper.getIntersection(winRange,seedRange)
+
             found = True
             break
     if found:
         break
+
+key = startKey
+currentNumber = foundSeedRangeIntersect[0]
+while key != endKey:
+    mapper = mappers[key]
+    currentNumber = mapper.mapFromNumber(currentNumber)
+    key = mapper.toKey
+    #print("current: " + str(currentNumber) + " key: " + key + " used mapper: " + str(mapper))
+print("solution 2 location: " + str(currentNumber))
 
 """
 seedRanges = np.asarray(seedsList).reshape(-1,2)

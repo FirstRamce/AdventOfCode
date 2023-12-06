@@ -79,17 +79,15 @@ class Mapper:
         if nextRanges == None:
             sortedMappings = self.getFilledMappings()
             sortedMappings.sort()
-            previousRanges.append((sortedMappings[0][1],sortedMappings[0][2]))
-            #for mapping in sortedMappings:
-             #   previousRanges.append((mapping[1],mapping[2]))
+            #previousRanges.append((sortedMappings[0][1],sortedMappings[0][2]))
+            for mapping in sortedMappings:
+                previousRanges.append((mapping[1],mapping[2]))
         else:
             sortedMappings = self.getFilledMappings()
             sortedMappings.sort()
             for range in nextRanges:
                 for mapping in sortedMappings:
                     intersect  = self.getIntersection(range, (mapping[0],mapping[2]))
-                    print(mapping)
-                    print(intersect)
                     if intersect:
                         previousIntersect = (intersect[0] -(mapping[0] - mapping[1]), intersect[1])
                         if not previousIntersect in previousRanges:
