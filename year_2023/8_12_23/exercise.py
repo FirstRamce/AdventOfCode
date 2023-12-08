@@ -1,6 +1,7 @@
 import re
+import math
 
-mapPattern = '([A-Z]{3}) = \(([A-Z]{3}), ([A-Z]{3})\)'
+mapPattern = '([A-Z\d]{3}) = \(([A-Z\d]{3}), ([A-Z\d]{3})\)'
 directionsPattern = '\w+'
 directions = None
 mapDict = {}
@@ -27,3 +28,27 @@ while not "ZZZ" in currentLocation:
     currentLocation = mapDict[currentLocation][lr]
     steps+=1
 print(steps)
+
+#Second exercise
+beginningValues = []
+for key in mapDict.keys():
+    if str.endswith(key,"A"):
+        beginningValues.append(key)
+
+stepsList = []
+for value in beginningValues:
+    current = value
+    steps = 0
+    while not str.endswith(current, "Z"):
+        stepIndex = steps % len(directions)
+        lr = 0
+        if directions[stepIndex] == "R":
+            lr = 1
+        current = mapDict[current][lr]
+        steps+=1
+    stepsList.append(steps)
+
+lcm = 1
+for stepAmount in stepsList:
+    lcm = math.lcm(lcm, stepAmount)
+print("second result: " +str(lcm))
