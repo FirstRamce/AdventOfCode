@@ -26,9 +26,6 @@ for iRow in range(0,len(galaxyMap)):
                 galaxyColDict[iCol] = galaxyColDict[iCol] + 1
         elif not iCol in galaxyColDict:
             galaxyColDict[iCol] = 0
-print(galaxyMap)
-print("row dict: " + str(galaxyRowDict))
-print("col dict: " + str(galaxyColDict))
 
 def modifyGalaxyIndex(galaxyList, startPos, isRow, amount):
     modifyIndex = 0
@@ -58,9 +55,6 @@ for key, value in galaxyColDict.items():
         modifyGalaxyIndex(modifiedGalaxyList, addIndex, False, driftAmount)
         colExpand +=driftAmount
 
-
-for row in biggerMap:
-    print(row)
 
 def calculateDistance(pos1, pos2):
     return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
