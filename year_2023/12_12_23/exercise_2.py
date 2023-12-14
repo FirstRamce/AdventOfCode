@@ -1,10 +1,10 @@
 import re
 from itertools import combinations
+from functools import cache
 
 numberPattern = "\d+"
 functioningPartsPattern = "(#+)"
 class Spring:
-    
     def __init__(self, springConditions, controlNumbers):
         self.springConditions = springConditions
         self.controlNumbers = []
@@ -16,42 +16,34 @@ class Spring:
     def __str__(self):
         return "Spring: " + self.springConditions +" - " + str(self.controlNumbers)
 
-    def validStartPositionForGroup(self, startPosition, groupIndex):
-        fieldsAmount = self.controlNumbers[groupIndex]
-        for i in range(startPosition, startPosition + fieldsAmount):
-            if not self.springConditions[i] == "#" and not self.springConditions[i] == "?":
-                return False
-        if len(self.springConditions) <= startPosition + fieldsAmount or self.springConditions[startPosition + fieldsAmount] == "." or self.springConditions[startPosition + fieldsAmount] == "?":
-            return True
-        return False
-                
-    
-    def getAmountOfVariants(self):
-        emptySlots = len(self.springConditions) - sum(self.controlNumbers) -len(self.controlNumbers) + 1
-        options = combinations(range(len(self.controlNumbers) + emptySlots), len(self.controlNumbers))
-        validOptions = 0
-        for possibility in options:
-            addIndex = 0
-            groupIndex = 0
-            impossible = False
-            for pos in possibility:
-                if not self.validStartPositionForGroup(pos + addIndex,groupIndex):
-                    impossible = True
-                    break
-                addIndex += (self.controlNumbers[groupIndex])
-                groupIndex += 1
-            print(possibility)
-            if not impossible:
-                print("valid option: " + str(possibility))
-                validOptions += 1
-        return validOptions
-
 
     #change from left to right (recursive) and dont continue withthe paths, that contain an illegal statement (# and . that are not possible)
     #Nonogram solution: https://towardsdatascience.com/solving-nonograms-with-120-lines-of-code-a7c6e0f627e4
+methodCalls = [0]
+@cache
+def countVariants(pattern, splits):
+    size=len(pattern)
+    methodCalls[0] +=1
+    if len(splits) == 0:
+        if all(c in ".?" for c in pattern):
+            return 1
+        return 0
+    
+    cSplit = splits[0]
+    rest = splits[1:]
+    minAfter = sum(rest) + len(rest)-1
+    count = 0
+
+    for before in range(size - minAfter - cSplit):
+        cPattern = "." * before + "#"*cSplit + "."
+        if (all(c0 == c1 or c0 == "?" for c0,c1 in zip(pattern, cPattern))):
+            count += countVariants(pattern[len(cPattern):], rest)
+    return count
+
+
 
 springListFoldUp = []
-foldUpAmount = 1
+foldUpAmount = 5
 with open("input") as f:
     for line in f.readlines():
         machinePart = line.split(" ")[0]
@@ -68,6 +60,7 @@ with open("input") as f:
 
 sumVariants = 0
 for spring in springListFoldUp:
-    validVariants = spring.getAmountOfVariants()
+    validVariants = countVariants(spring.springConditions, tuple(spring.controlNumbers))
     sumVariants += validVariants
 print("solution 2: "+ str(sumVariants))
+print(methodCalls)
